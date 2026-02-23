@@ -1,0 +1,25 @@
+Dependencies
+node_modules/
+
+Environment
+.env
+.env.local
+
+Build
+dist/
+build/
+
+IDE
+.vscode/
+.idea/
+
+OS
+.DS_Store
+Thumbs.db
+
+Test files
+testGemini.js
+testVision.js
+testImageReal.js
+testImageFinal.js
+testDB.js
