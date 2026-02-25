@@ -1,24 +1,20 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import "./App.css";
 
-const API_URL = import.meta.env.REACT_APP_API_URL || "https://islamabad-properties-ai-chatbot.onrender.com";
+const API_URL = import.meta.env.REACT_APP_API_URL || "http://localhost:5000";
 
-// ============ PROPERTY CARD ============
-const PropertyCard = ({ property }) => {
-  const [imgError, setImgError] = useState(false);
+// ============ PROPERTY CARD (Updated with Payment Plan) ============
+const PropertyCard = ({ property, onShowPayment, onBook }) => {
+  const [imgErr, setImgErr] = useState(false);
 
   return (
     <div className="prop-card">
       <div className="prop-img-wrap">
         <img
-          src={
-            imgError
-              ? "https://placehold.co/400x250/075e54/white?text=Property"
-              : property.image
-          }
+          src={imgErr ? "https://placehold.co/400x250/075e54/white?text=Property" : property.image}
           alt={property.title}
           className="prop-img"
-          onError={() => setImgError(true)}
+          onError={() => setImgErr(true)}
         />
         <span className={`prop-badge ${property.purpose}`}>
           {property.purpose === "rent" ? "FOR RENT" : "FOR SALE"}
@@ -28,9 +24,7 @@ const PropertyCard = ({ property }) => {
 
       <div className="prop-body">
         <h4 className="prop-title">{property.title}</h4>
-
         <p className="prop-price">PKR {property.priceFormatted}</p>
-
         <p className="prop-loc">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="#075e54">
             <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
@@ -40,51 +34,46 @@ const PropertyCard = ({ property }) => {
 
         <div className="prop-stats">
           {property.bedrooms > 0 && (
-            <div className="prop-stat">
-              <span className="stat-icon">🛏️</span>
-              <span>{property.bedrooms} Beds</span>
-            </div>
+            <div className="prop-stat">🛏️ {property.bedrooms} Beds</div>
           )}
           {property.bathrooms > 0 && (
-            <div className="prop-stat">
-              <span className="stat-icon">🚿</span>
-              <span>{property.bathrooms} Baths</span>
-            </div>
+            <div className="prop-stat">🚿 {property.bathrooms} Baths</div>
           )}
-          <div className="prop-stat">
-            <span className="stat-icon">📐</span>
-            <span>{property.size}</span>
-          </div>
+          <div className="prop-stat">📐 {property.size}</div>
         </div>
 
         <div className="prop-tags">
           {property.features.slice(0, 3).map((f, i) => (
-            <span key={i} className="prop-tag">
-              {f}
-            </span>
+            <span key={i} className="prop-tag">{f}</span>
           ))}
         </div>
 
+        {/* Payment Plan Preview */}
+        {property.paymentPlan && property.purpose === "sale" && (
+          <div className="payment-preview">
+            <div className="payment-row">
+              <span>💵 Booking:</span>
+              <strong>PKR {(property.paymentPlan.bookingAmount || 0).toLocaleString()}</strong>
+            </div>
+            <div className="payment-row">
+              <span>📅 Installment:</span>
+              <strong>PKR {(property.paymentPlan.monthlyInstallment || 0).toLocaleString()}/mo</strong>
+            </div>
+          </div>
+        )}
+
         <div className="prop-btns">
           <button
-            className="prop-btn details"
-            onClick={() => {
-              alert(
-                `📋 ${property.title}\n\n${property.description}\n\n📐 Size: ${property.size}\n💰 Price: PKR ${property.priceFormatted}\n📍 ${property.location}\n\n📞 Agent: ${property.agent}\n📱 ${property.agentPhone}`,
-              );
-            }}
+            className="prop-btn payment"
+            onClick={() => onShowPayment(property)}
           >
-            📋 Details
+            💰 Payment Plan
           </button>
           <button
-            className="prop-btn contact"
-            onClick={() => {
-              alert(
-                `📞 Contact ${property.agent}\n📱 ${property.agentPhone}\n\nCall or WhatsApp to schedule a visit!`,
-              );
-            }}
+            className="prop-btn book"
+            onClick={() => onBook(property)}
           >
-            📞 Contact
+            📝 Book Now
           </button>
         </div>
       </div>
@@ -95,7 +84,6 @@ const PropertyCard = ({ property }) => {
 // ============ TYPING DOTS ============
 const TypingDots = () => (
   <div className="msg-row bot">
-    <div className="bot-avatar-small">🏡</div>
     <div className="bubble bot typing-bub">
       <div className="dots">
         <span></span>
@@ -115,126 +103,132 @@ const formatText = (text) => {
     .replace(/>/g, "&gt;")
     .replace(/\*(.*?)\*/g, "<strong>$1</strong>")
     .replace(/_(.*?)_/g, "<em>$1</em>")
+    .replace(/━/g, "━")
     .replace(/\n/g, "<br/>");
   return { __html: html };
 };
 
-// ============ GET TIME ============
-const getTime = () => {
-  return new Date().toLocaleTimeString("en-US", {
+const getTime = () =>
+  new Date().toLocaleTimeString("en-US", {
     hour: "2-digit",
     minute: "2-digit",
     hour12: true,
   });
-};
 
 // ============ MAIN APP ============
 function App() {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
+  const [companyInfo, setCompanyInfo] = useState(null);
+  const [sessionId] = useState(() => `session_${Date.now()}_${Math.random().toString(36).substring(7)}`);
   const bottomRef = useRef(null);
   const inputRef = useRef(null);
-
-  // Scroll to bottom
-  const scrollDown = useCallback(() => {
-    setTimeout(() => {
-      bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-    }, 100);
-  }, []);
-
   const startedRef = useRef(false);
 
+  const scrollDown = useCallback(() => {
+    setTimeout(() => bottomRef.current?.scrollIntoView({ behavior: "smooth" }), 100);
+  }, []);
+
+  useEffect(() => scrollDown(), [messages, loading, scrollDown]);
+
+  // Fetch company info
   useEffect(() => {
-    if (!startedRef.current) {
-      startedRef.current = true;
-      handleSend("hello", true);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    fetch(`${API_URL}/api/company`)
+      .then((r) => r.json())
+      .then((data) => {
+        if (data.success) setCompanyInfo(data.company);
+      })
+      .catch(() => {});
   }, []);
 
-  // Send message to API
-  const sendToAPI = useCallback(async (text) => {
-    try {
-      const res = await fetch(`${API_URL}/api/chat`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: text }),
-      });
+  // Send to API
+  const sendToAPI = useCallback(
+    async (text) => {
+      try {
+        const res = await fetch(`${API_URL}/api/chat`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message: text, sessionId }),
+        });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        return await res.json();
+      } catch (err) {
+        return {
+          text: "⚠️ Cannot connect to server. Make sure backend is running.",
+          properties: [],
+          quickReplies: ["Try Again"],
+        };
+      }
+    },
+    [sessionId]
+  );
 
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-
-      const data = await res.json();
-      return data;
-    } catch (err) {
-      console.error("API Error:", err);
-      return {
-        text: "⚠️ Cannot connect to server.\n\nMake sure backend is running:\n`cd backend && node server.js`",
-        properties: [],
-        quickReplies: ["Try Again"],
-      };
-    }
-  }, []);
-
-  // Handle sending a message
+  // Handle send
   const handleSend = useCallback(
-    async (text, skipUserMsg = false) => {
+    async (text, skipUser = false) => {
       const trimmed = text.trim();
       if (!trimmed || loading) return;
 
-      // Add user message
-      if (!skipUserMsg) {
-        const userMsg = {
-          id: Date.now(),
-          from: "user",
-          text: trimmed,
-          time: getTime(),
-        };
-        setMessages((prev) => [...prev, userMsg]);
+      if (!skipUser) {
+        setMessages((prev) => [
+          ...prev,
+          { id: Date.now(), from: "user", text: trimmed, time: getTime() },
+        ]);
       }
 
       setInput("");
       setLoading(true);
 
-      // Call API
       const data = await sendToAPI(trimmed);
 
-      // Add bot message
-      const botMsg = {
-        id: Date.now() + 1,
-        from: "bot",
-        text: data.text || "Sorry, I could not understand that.",
-        properties: data.properties || [],
-        quickReplies: data.quickReplies || [],
-        time: getTime(),
-      };
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: Date.now() + 1,
+          from: "bot",
+          text: data.text || "",
+          properties: data.properties || [],
+          quickReplies: data.quickReplies || [],
+          time: getTime(),
+        },
+      ]);
 
-      setMessages((prev) => [...prev, botMsg]);
       setLoading(false);
-
-      // Focus input after response
-      setTimeout(() => {
-        inputRef.current?.focus();
-      }, 200);
+      setTimeout(() => inputRef.current?.focus(), 200);
     },
-    [loading, sendToAPI],
+    [loading, sendToAPI]
   );
 
+  // Welcome
+  useEffect(() => {
+    if (!startedRef.current) {
+      startedRef.current = true;
+      handleSend("hello", true);
+    }
+    // eslint-disable-next-line
+  }, []);
 
-  // Form submit
   const onSubmit = (e) => {
     e.preventDefault();
     handleSend(input);
   };
 
-  // Quick reply click
   const onQuickReply = (text) => {
-    if (!loading) {
-      handleSend(text);
-    }
+    if (!loading) handleSend(text);
   };
 
-  // Find last bot message index for showing quick replies
+  // Payment plan button handler
+  const onShowPayment = (property) => {
+    handleSend(`Show me the complete payment plan for "${property.title}" (Property ID: ${property.id})`);
+  };
+
+  // Book button handler
+  const onBook = (property) => {
+    handleSend(`I want to book "${property.title}" (Property ID: ${property.id}). Please tell me the booking process.`);
+  };
+
+  // Last bot message index
   const lastBotIdx = (() => {
     for (let i = messages.length - 1; i >= 0; i--) {
       if (messages[i].from === "bot") return i;
@@ -242,10 +236,13 @@ function App() {
     return -1;
   })();
 
+  const cName = companyInfo?.name || "Prime Islamabad Realty";
+  const cLogo = companyInfo?.logo || "🏢";
+
   return (
     <div className="app-container">
       <div className="phone">
-        {/* ===== HEADER ===== */}
+        {/* HEADER */}
         <header className="wa-header">
           <div className="wa-header-left">
             <button className="wa-back">
@@ -253,9 +250,9 @@ function App() {
                 <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z" />
               </svg>
             </button>
-            <div className="wa-avatar">🏡</div>
+            <div className="wa-avatar">{cLogo}</div>
             <div className="wa-header-info">
-              <h1>Islamabad Properties</h1>
+              <h1>{cName}</h1>
               <p>{loading ? "typing..." : "online"}</p>
             </div>
           </div>
@@ -278,71 +275,51 @@ function App() {
           </div>
         </header>
 
-        {/* ===== CHAT AREA ===== */}
+        {/* CHAT */}
         <main className="wa-chat">
-          {/* Date pill */}
           <div className="date-pill">
             <span>Today</span>
           </div>
 
-          {/* Encryption notice */}
           <div className="encrypt-notice">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="#8c8c6e">
               <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z" />
             </svg>
-            Messages are end-to-end encrypted. No one outside of this chat can
-            read them.
+            Messages are end-to-end encrypted. No one outside of this chat can read them.
           </div>
 
-          {/* Messages */}
           {messages.map((msg, idx) => (
             <React.Fragment key={msg.id}>
-              {/* USER MESSAGE */}
               {msg.from === "user" && (
                 <div className="msg-row user">
                   <div className="bubble user">
-                    <div
-                      className="bubble-text"
-                      dangerouslySetInnerHTML={formatText(msg.text)}
-                    />
+                    <div className="bubble-text" dangerouslySetInnerHTML={formatText(msg.text)} />
                     <span className="bubble-time">
                       {msg.time}
-                      <svg
-                        width="16"
-                        height="11"
-                        viewBox="0 0 16 11"
-                        className="read-ticks"
-                      >
-                        <path
-                          d="M11.071.653a.457.457 0 0 0-.304-.102.493.493 0 0 0-.381.178l-6.19 7.636-2.011-2.175a.463.463 0 0 0-.336-.153.457.457 0 0 0-.344.153.441.441 0 0 0 0 .637l2.34 2.553a.479.479 0 0 0 .352.161h.013a.467.467 0 0 0 .343-.161l6.533-8.076a.441.441 0 0 0-.016-.65z"
-                          fill="#53bdeb"
-                        />
-                        <path
-                          d="M15.071.653a.457.457 0 0 0-.304-.102.493.493 0 0 0-.381.178l-6.19 7.636-1.2-1.3-.348.39 1.577 1.724a.479.479 0 0 0 .352.161h.013a.467.467 0 0 0 .343-.161l6.533-8.076a.441.441 0 0 0-.016-.65z"
-                          fill="#53bdeb"
-                        />
+                      <svg width="16" height="11" viewBox="0 0 16 11" className="read-ticks">
+                        <path d="M11.071.653a.457.457 0 0 0-.304-.102.493.493 0 0 0-.381.178l-6.19 7.636-2.011-2.175a.463.463 0 0 0-.336-.153.457.457 0 0 0-.344.153.441.441 0 0 0 0 .637l2.34 2.553a.479.479 0 0 0 .352.161h.013a.467.467 0 0 0 .343-.161l6.533-8.076a.441.441 0 0 0-.016-.65z" fill="#53bdeb" />
+                        <path d="M15.071.653a.457.457 0 0 0-.304-.102.493.493 0 0 0-.381.178l-6.19 7.636-1.2-1.3-.348.39 1.577 1.724a.479.479 0 0 0 .352.161h.013a.467.467 0 0 0 .343-.161l6.533-8.076a.441.441 0 0 0-.016-.65z" fill="#53bdeb" />
                       </svg>
                     </span>
                   </div>
                 </div>
               )}
 
-              {/* BOT MESSAGE */}
               {msg.from === "bot" && (
                 <div className="msg-row bot">
-                  <div className="bot-avatar-small">🏡</div>
                   <div className="bubble-group">
                     <div className="bubble bot">
-                      <div
-                        className="bubble-text"
-                        dangerouslySetInnerHTML={formatText(msg.text)}
-                      />
+                      <div className="bubble-text" dangerouslySetInnerHTML={formatText(msg.text)} />
 
-                      {/* PROPERTY CARDS */}
                       {msg.properties && msg.properties.length > 0 && (
                         <div className="props-container">
                           {msg.properties.map((prop) => (
-                            <PropertyCard key={prop.id} property={prop} />
+                            <PropertyCard
+                              key={prop.id}
+                              property={prop}
+                              onShowPayment={onShowPayment}
+                              onBook={onBook}
+                            />
                           ))}
                         </div>
                       )}
@@ -350,18 +327,12 @@ function App() {
                       <span className="bubble-time bot-time">{msg.time}</span>
                     </div>
 
-                    {/* QUICK REPLIES - Only on last bot message */}
                     {idx === lastBotIdx &&
-                      msg.quickReplies &&
-                      msg.quickReplies.length > 0 &&
+                      msg.quickReplies?.length > 0 &&
                       !loading && (
                         <div className="quick-replies">
                           {msg.quickReplies.map((qr, i) => (
-                            <button
-                              key={i}
-                              className="qr-btn"
-                              onClick={() => onQuickReply(qr)}
-                            >
+                            <button key={i} className="qr-btn" onClick={() => onQuickReply(qr)}>
                               {qr}
                             </button>
                           ))}
@@ -373,16 +344,14 @@ function App() {
             </React.Fragment>
           ))}
 
-          {/* TYPING INDICATOR */}
           {loading && <TypingDots />}
-
           <div ref={bottomRef} style={{ height: 20 }} />
         </main>
 
-        {/* ===== INPUT BAR ===== */}
+        {/* INPUT */}
         <footer className="wa-input-bar">
           <form onSubmit={onSubmit} className="wa-input-form">
-            <button type="button" className="wa-input-icon emoji-btn">
+            <button type="button" className="wa-input-icon">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="#8c8c8c">
                 <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S16.33 8 15.5 8 14 8.67 14 9.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S9.33 8 8.5 8 7 8.67 7 9.5 7.67 11 8.5 11zm3.5 6.5c2.33 0 4.31-1.46 5.11-3.5H6.89c.8 2.04 2.78 3.5 5.11 3.5z" />
               </svg>
@@ -398,11 +367,6 @@ function App() {
                 disabled={loading}
                 autoComplete="off"
               />
-              <button type="button" className="wa-attach-btn">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="#8c8c8c">
-                  <path d="M16.5 6v11.5c0 2.21-1.79 4-4 4s-4-1.79-4-4V5c0-1.38 1.12-2.5 2.5-2.5s2.5 1.12 2.5 2.5v10.5c0 .55-.45 1-1 1s-1-.45-1-1V6H10v9.5c0 1.38 1.12 2.5 2.5 2.5s2.5-1.12 2.5-2.5V5c0-2.21-1.79-4-4-4S7 2.79 7 5v12.5c0 3.04 2.46 5.5 5.5 5.5s5.5-2.46 5.5-5.5V6h-1.5z" />
-                </svg>
-              </button>
             </div>
 
             {input.trim() ? (
@@ -422,11 +386,10 @@ function App() {
         </footer>
       </div>
 
-      {/* BRANDING */}
       <div className="demo-brand">
-        <p>🏡 Islamabad Properties AI Chatbot</p>
+        <p>{cLogo} {cName}</p>
         <p className="demo-sub">
-          Demo built by <strong>Dawood Ahmed</strong> • Powered by Grok AI
+          AI Property Assistant • Built by <strong>Dawood Ahmed</strong>
         </p>
       </div>
     </div>

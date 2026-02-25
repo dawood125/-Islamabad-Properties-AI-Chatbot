@@ -13,12 +13,30 @@ const properties = [
     bedrooms: 3,
     bathrooms: 3,
     yearBuilt: 2022,
-    description: "Beautifully designed 3-bed house with modern architecture, imported fittings, and lush green lawn. Close to DHA main market.",
-    features: ["Car Parking", "Lawn", "Servant Quarter", "Gas Available", "CCTV Security"],
-    image: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=400&h=300&fit=crop",
+    description:
+      "Beautifully designed 3-bed house with modern architecture, imported fittings, and lush green lawn. Close to DHA main market.",
+    features: [
+      "Car Parking",
+      "Lawn",
+      "Servant Quarter",
+      "Gas Available",
+      "CCTV Security",
+    ],
+    image:
+      "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=400&h=300&fit=crop",
     status: "available",
-    agent: "Ahmed Ali",
-    agentPhone: "+92 316 1234567"
+    agentId: 1,
+    // ===== NEW: PAYMENT PLAN =====
+    paymentPlan: {
+      totalPrice: 22500000,
+      downPayment: 4500000,
+      downPaymentPercent: 20,
+      installmentMonths: 24,
+      monthlyInstallment: 750000,
+      possession: "Immediate",
+      bookingAmount: 500000,
+      note: "Direct owner sale. Price slightly negotiable.",
+    },
   },
   {
     id: 2,
@@ -33,12 +51,29 @@ const properties = [
     bedrooms: 5,
     bathrooms: 5,
     yearBuilt: 2023,
-    description: "Brand new luxury house with 5 spacious bedrooms, home theater, modern kitchen with island, and rooftop terrace with Margalla Hills view.",
-    features: ["Double Car Parking", "Home Theater", "Rooftop Terrace", "Solar Panels", "Smart Home System"],
-    image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=400&h=300&fit=crop",
+    description:
+      "Brand new luxury house with 5 spacious bedrooms, home theater, modern kitchen with island, and rooftop terrace with Margalla Hills view.",
+    features: [
+      "Double Car Parking",
+      "Home Theater",
+      "Rooftop Terrace",
+      "Solar Panels",
+      "Smart Home System",
+    ],
+    image:
+      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=400&h=300&fit=crop",
     status: "available",
-    agent: "Ahmed Ali",
-    agentPhone: "+92 316 1234567"
+    agentId: 1,
+    paymentPlan: {
+      totalPrice: 45000000,
+      downPayment: 9000000,
+      downPaymentPercent: 20,
+      installmentMonths: 36,
+      monthlyInstallment: 1000000,
+      possession: "Immediate",
+      bookingAmount: 1000000,
+      note: "Brand new construction. Flexible payment plan available.",
+    },
   },
   {
     id: 3,
@@ -53,12 +88,29 @@ const properties = [
     bedrooms: 6,
     bathrooms: 7,
     yearBuilt: 2021,
-    description: "Executive class 1 Kanal house with premium construction, Italian marble flooring, 6 master bedrooms, swimming pool, and landscaped garden.",
-    features: ["Swimming Pool", "Garden", "3 Car Garage", "Elevator", "Backup Generator"],
-    image: "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=400&h=300&fit=crop",
+    description:
+      "Executive class 1 Kanal house with premium construction, Italian marble flooring, 6 master bedrooms, swimming pool, and landscaped garden.",
+    features: [
+      "Swimming Pool",
+      "Garden",
+      "3 Car Garage",
+      "Elevator",
+      "Backup Generator",
+    ],
+    image:
+      "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=400&h=300&fit=crop",
     status: "available",
-    agent: "Faisal Khan",
-    agentPhone: "+92 300 9876543"
+    agentId: 2,
+    paymentPlan: {
+      totalPrice: 85000000,
+      downPayment: 25000000,
+      downPaymentPercent: 30,
+      installmentMonths: 36,
+      monthlyInstallment: 1666667,
+      possession: "Immediate",
+      bookingAmount: 2000000,
+      note: "Premium property. Negotiation possible for full payment.",
+    },
   },
 
   // ============ BAHRIA TOWN ============
@@ -75,12 +127,29 @@ const properties = [
     bedrooms: 3,
     bathrooms: 3,
     yearBuilt: 2023,
-    description: "Newly constructed 5 marla house in the heart of Bahria Town Phase 4. Walking distance to mosque, park, and commercial area.",
-    features: ["Car Parking", "Sui Gas", "Gated Community", "24/7 Security", "Nearby Park"],
-    image: "https://images.unsplash.com/photo-1605276374104-dee2a0ed3cd6?w=400&h=300&fit=crop",
+    description:
+      "Newly constructed 5 marla house in the heart of Bahria Town Phase 4. Walking distance to mosque, park, and commercial area.",
+    features: [
+      "Car Parking",
+      "Sui Gas",
+      "Gated Community",
+      "24/7 Security",
+      "Nearby Park",
+    ],
+    image:
+      "https://images.unsplash.com/photo-1605276374104-dee2a0ed3cd6?w=400&h=300&fit=crop",
     status: "available",
-    agent: "Hassan Raza",
-    agentPhone: "+92 333 4567890"
+    agentId: 3,
+    paymentPlan: {
+      totalPrice: 15000000,
+      downPayment: 3000000,
+      downPaymentPercent: 20,
+      installmentMonths: 24,
+      monthlyInstallment: 500000,
+      possession: "Immediate",
+      bookingAmount: 300000,
+      note: "Great starter home. Ideal for small families.",
+    },
   },
   {
     id: 5,
@@ -95,12 +164,29 @@ const properties = [
     bedrooms: 4,
     bathrooms: 5,
     yearBuilt: 2022,
-    description: "Designer 10 marla house in premium Overseas Block. 4 bedrooms with attached baths, imported kitchen, and beautiful front elevation.",
-    features: ["Imported Kitchen", "Wood Flooring", "Central Heating", "CCTV", "Intercom"],
-    image: "https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?w=400&h=300&fit=crop",
+    description:
+      "Designer 10 marla house in premium Overseas Block. 4 bedrooms with attached baths, imported kitchen, and beautiful front elevation.",
+    features: [
+      "Imported Kitchen",
+      "Wood Flooring",
+      "Central Heating",
+      "CCTV",
+      "Intercom",
+    ],
+    image:
+      "https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?w=400&h=300&fit=crop",
     status: "available",
-    agent: "Hassan Raza",
-    agentPhone: "+92 333 4567890"
+    agentId: 3,
+    paymentPlan: {
+      totalPrice: 32000000,
+      downPayment: 6400000,
+      downPaymentPercent: 20,
+      installmentMonths: 30,
+      monthlyInstallment: 853333,
+      possession: "Immediate",
+      bookingAmount: 500000,
+      note: "Overseas Block premium location. High appreciation value.",
+    },
   },
   {
     id: 6,
@@ -115,12 +201,28 @@ const properties = [
     bedrooms: 0,
     bathrooms: 0,
     yearBuilt: null,
-    description: "Prime location 5 marla plot in developed sector of Bahria Town Phase 8. All utilities available. Ideal for investment or construction.",
-    features: ["Developed Area", "Utilities Available", "Near Main Road", "Gated Community"],
-    image: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=400&h=300&fit=crop",
+    description:
+      "Prime location 5 marla plot in developed sector of Bahria Town Phase 8. All utilities available. Ideal for investment or construction.",
+    features: [
+      "Developed Area",
+      "Utilities Available",
+      "Near Main Road",
+      "Gated Community",
+    ],
+    image:
+      "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=400&h=300&fit=crop",
     status: "available",
-    agent: "Hassan Raza",
-    agentPhone: "+92 333 4567890"
+    agentId: 3,
+    paymentPlan: {
+      totalPrice: 6500000,
+      downPayment: 1300000,
+      downPaymentPercent: 20,
+      installmentMonths: 18,
+      monthlyInstallment: 288889,
+      possession: "Ready for Construction",
+      bookingAmount: 200000,
+      note: "High ROI investment. Plot value increasing rapidly.",
+    },
   },
 
   // ============ E-11 ============
@@ -137,12 +239,29 @@ const properties = [
     bedrooms: 2,
     bathrooms: 2,
     yearBuilt: 2021,
-    description: "Stunning 2-bedroom apartment with panoramic Margalla Hills view. Fully furnished with modular kitchen and wooden flooring.",
-    features: ["Hills View", "Elevator", "Gym", "Underground Parking", "Community Pool"],
-    image: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=400&h=300&fit=crop",
+    description:
+      "Stunning 2-bedroom apartment with panoramic Margalla Hills view. Fully furnished with modular kitchen and wooden flooring.",
+    features: [
+      "Hills View",
+      "Elevator",
+      "Gym",
+      "Underground Parking",
+      "Community Pool",
+    ],
+    image:
+      "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=400&h=300&fit=crop",
     status: "available",
-    agent: "Sana Malik",
-    agentPhone: "+92 321 6543210"
+    agentId: 4,
+    paymentPlan: {
+      totalPrice: 9500000,
+      downPayment: 1900000,
+      downPaymentPercent: 20,
+      installmentMonths: 24,
+      monthlyInstallment: 316667,
+      possession: "Immediate",
+      bookingAmount: 200000,
+      note: "Margalla Hills view. Fully furnished option available.",
+    },
   },
   {
     id: 8,
@@ -157,12 +276,29 @@ const properties = [
     bedrooms: 3,
     bathrooms: 2,
     yearBuilt: 2020,
-    description: "Well-maintained 3-bedroom apartment available for rent. Semi-furnished with split ACs in all rooms. Family-only building.",
-    features: ["Semi-Furnished", "Split ACs", "Parking", "Security Guard", "Water Supply"],
-    image: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=400&h=300&fit=crop",
+    description:
+      "Well-maintained 3-bedroom apartment available for rent. Semi-furnished with split ACs in all rooms. Family-only building.",
+    features: [
+      "Semi-Furnished",
+      "Split ACs",
+      "Parking",
+      "Security Guard",
+      "Water Supply",
+    ],
+    image:
+      "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=400&h=300&fit=crop",
     status: "available",
-    agent: "Sana Malik",
-    agentPhone: "+92 321 6543210"
+    agentId: 4,
+    paymentPlan: {
+      totalPrice: 55000,
+      downPayment: 110000,
+      downPaymentPercent: 0,
+      installmentMonths: 0,
+      monthlyInstallment: 55000,
+      possession: "Immediate",
+      bookingAmount: 110000,
+      note: "2 months advance security deposit required. 1 year lease minimum.",
+    },
   },
 
   // ============ F-SECTORS ============
@@ -179,12 +315,29 @@ const properties = [
     bedrooms: 6,
     bathrooms: 7,
     yearBuilt: 2019,
-    description: "Ultra-premium 1 Kanal house in Islamabad's most prestigious sector. Architect-designed with premium finishes throughout. Minutes from Faisal Mosque.",
-    features: ["Architect Designed", "Italian Marble", "Home Office", "3 Lounges", "Servant Quarter"],
-    image: "https://images.unsplash.com/photo-1613977257363-707ba9348227?w=400&h=300&fit=crop",
+    description:
+      "Ultra-premium 1 Kanal house in Islamabad's most prestigious sector. Architect-designed with premium finishes throughout.",
+    features: [
+      "Architect Designed",
+      "Italian Marble",
+      "Home Office",
+      "3 Lounges",
+      "Servant Quarter",
+    ],
+    image:
+      "https://images.unsplash.com/photo-1613977257363-707ba9348227?w=400&h=300&fit=crop",
     status: "available",
-    agent: "Faisal Khan",
-    agentPhone: "+92 300 9876543"
+    agentId: 2,
+    paymentPlan: {
+      totalPrice: 120000000,
+      downPayment: 36000000,
+      downPaymentPercent: 30,
+      installmentMonths: 36,
+      monthlyInstallment: 2333333,
+      possession: "Immediate",
+      bookingAmount: 5000000,
+      note: "Most prestigious sector in Islamabad. Full payment discount: 5%",
+    },
   },
   {
     id: 10,
@@ -199,12 +352,29 @@ const properties = [
     bedrooms: 4,
     bathrooms: 4,
     yearBuilt: 2018,
-    description: "Beautiful 10 marla house available for rent in F-8. 4 bedrooms, drawing room, TV lounge, and lush green lawn. Ideal for families.",
-    features: ["Lawn", "Drawing Room", "TV Lounge", "Servant Quarter", "Garage"],
-    image: "https://images.unsplash.com/photo-1599427303058-f04cbcf4756f?w=400&h=300&fit=crop",
+    description:
+      "Beautiful 10 marla house available for rent in F-8. 4 bedrooms, drawing room, TV lounge, and lush green lawn. Ideal for families.",
+    features: [
+      "Lawn",
+      "Drawing Room",
+      "TV Lounge",
+      "Servant Quarter",
+      "Garage",
+    ],
+    image:
+      "https://images.unsplash.com/photo-1599427303058-f04cbcf4756f?w=400&h=300&fit=crop",
     status: "available",
-    agent: "Sana Malik",
-    agentPhone: "+92 321 6543210"
+    agentId: 4,
+    paymentPlan: {
+      totalPrice: 120000,
+      downPayment: 360000,
+      downPaymentPercent: 0,
+      installmentMonths: 0,
+      monthlyInstallment: 120000,
+      possession: "Immediate",
+      bookingAmount: 360000,
+      note: "3 months advance + 1 month security. 1 year lease.",
+    },
   },
 
   // ============ G-13 ============
@@ -221,12 +391,29 @@ const properties = [
     bedrooms: 3,
     bathrooms: 2,
     yearBuilt: 2022,
-    description: "Budget-friendly 5 marla house in G-13. Well-constructed with 3 bedrooms, open kitchen, and car porch. Great for first-time buyers.",
-    features: ["Car Porch", "Sui Gas", "CDA Approved", "Near Market", "Public Transport"],
-    image: "https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=400&h=300&fit=crop",
+    description:
+      "Budget-friendly 5 marla house in G-13. Well-constructed with 3 bedrooms, open kitchen, and car porch. Great for first-time buyers.",
+    features: [
+      "Car Porch",
+      "Sui Gas",
+      "CDA Approved",
+      "Near Market",
+      "Public Transport",
+    ],
+    image:
+      "https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=400&h=300&fit=crop",
     status: "available",
-    agent: "Ahmed Ali",
-    agentPhone: "+92 316 1234567"
+    agentId: 1,
+    paymentPlan: {
+      totalPrice: 11000000,
+      downPayment: 2200000,
+      downPaymentPercent: 20,
+      installmentMonths: 24,
+      monthlyInstallment: 366667,
+      possession: "Immediate",
+      bookingAmount: 200000,
+      note: "Best budget option in Islamabad. CDA approved sector.",
+    },
   },
 
   // ============ I-8 ============
@@ -243,12 +430,29 @@ const properties = [
     bedrooms: 5,
     bathrooms: 5,
     yearBuilt: 2023,
-    description: "Contemporary design 10 marla house in I-8. Open plan living, floor-to-ceiling windows, and basement with home cinema.",
-    features: ["Basement", "Home Cinema", "Modern Kitchen", "Solar Panels", "Rainwater Harvesting"],
-    image: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=400&h=300&fit=crop",
+    description:
+      "Contemporary design 10 marla house in I-8. Open plan living, floor-to-ceiling windows, and basement with home cinema.",
+    features: [
+      "Basement",
+      "Home Cinema",
+      "Modern Kitchen",
+      "Solar Panels",
+      "Rainwater Harvesting",
+    ],
+    image:
+      "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=400&h=300&fit=crop",
     status: "available",
-    agent: "Faisal Khan",
-    agentPhone: "+92 300 9876543"
+    agentId: 2,
+    paymentPlan: {
+      totalPrice: 48000000,
+      downPayment: 9600000,
+      downPaymentPercent: 20,
+      installmentMonths: 36,
+      monthlyInstallment: 1066667,
+      possession: "Immediate",
+      bookingAmount: 1000000,
+      note: "Modern smart home. Eco-friendly with solar panels.",
+    },
   },
 
   // ============ BLUE AREA ============
@@ -265,12 +469,29 @@ const properties = [
     bedrooms: 0,
     bathrooms: 2,
     yearBuilt: 2020,
-    description: "Prime commercial office space on Jinnah Avenue. 4000 sqft open floor plan, ideal for corporate offices. High-rise building with elevator access.",
-    features: ["Jinnah Avenue Facing", "Elevator", "Central AC", "Fire Safety", "Parking Basement"],
-    image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=400&h=300&fit=crop",
+    description:
+      "Prime commercial office space on Jinnah Avenue. 4000 sqft open floor plan, ideal for corporate offices.",
+    features: [
+      "Jinnah Avenue Facing",
+      "Elevator",
+      "Central AC",
+      "Fire Safety",
+      "Parking Basement",
+    ],
+    image:
+      "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=400&h=300&fit=crop",
     status: "available",
-    agent: "Faisal Khan",
-    agentPhone: "+92 300 9876543"
+    agentId: 2,
+    paymentPlan: {
+      totalPrice: 75000000,
+      downPayment: 22500000,
+      downPaymentPercent: 30,
+      installmentMonths: 36,
+      monthlyInstallment: 1458333,
+      possession: "3 Months",
+      bookingAmount: 2000000,
+      note: "Prime commercial location. Rental income potential: 5-8 lakh/month.",
+    },
   },
 
   // ============ GULBERG GREENS ============
@@ -287,12 +508,29 @@ const properties = [
     bedrooms: 0,
     bathrooms: 0,
     yearBuilt: null,
-    description: "Investment opportunity in Gulberg Greens. 5 marla plot in developed block with all amenities. Society has mini golf course, mosque, and commercial area.",
-    features: ["Developed Block", "Boundary Wall", "Sui Gas", "Electricity", "Near Golf Course"],
-    image: "https://images.unsplash.com/photo-1628624747186-a941c476b7ef?w=400&h=300&fit=crop",
+    description:
+      "Investment opportunity in Gulberg Greens. 5 marla plot in developed block with all amenities.",
+    features: [
+      "Developed Block",
+      "Boundary Wall",
+      "Sui Gas",
+      "Electricity",
+      "Near Golf Course",
+    ],
+    image:
+      "https://images.unsplash.com/photo-1628624747186-a941c476b7ef?w=400&h=300&fit=crop",
     status: "available",
-    agent: "Ahmed Ali",
-    agentPhone: "+92 316 1234567"
+    agentId: 1,
+    paymentPlan: {
+      totalPrice: 5500000,
+      downPayment: 1100000,
+      downPaymentPercent: 20,
+      installmentMonths: 18,
+      monthlyInstallment: 244444,
+      possession: "Ready for Construction",
+      bookingAmount: 150000,
+      note: "Developed block. All utilities available. Quick appreciation.",
+    },
   },
 
   // ============ CAPITAL SMART CITY ============
@@ -309,12 +547,29 @@ const properties = [
     bedrooms: 0,
     bathrooms: 0,
     yearBuilt: null,
-    description: "Affordable investment in Pakistan's first smart city. 5 marla plot with installment plan available. RUDA approved society near New Islamabad Airport.",
-    features: ["Installment Plan", "RUDA Approved", "Near Airport", "Smart Infrastructure", "High ROI"],
-    image: "https://images.unsplash.com/photo-1523348837708-15d4a09cfac2?w=400&h=300&fit=crop",
+    description:
+      "Affordable investment in Pakistan's first smart city. 5 marla plot with installment plan available.",
+    features: [
+      "Installment Plan",
+      "RUDA Approved",
+      "Near Airport",
+      "Smart Infrastructure",
+      "High ROI",
+    ],
+    image:
+      "https://images.unsplash.com/photo-1523348837708-15d4a09cfac2?w=400&h=300&fit=crop",
     status: "available",
-    agent: "Hassan Raza",
-    agentPhone: "+92 333 4567890"
+    agentId: 3,
+    paymentPlan: {
+      totalPrice: 2000000,
+      downPayment: 400000,
+      downPaymentPercent: 20,
+      installmentMonths: 48,
+      monthlyInstallment: 33333,
+      possession: "2-3 Years (Under Development)",
+      bookingAmount: 100000,
+      note: "Cheapest investment in Islamabad. Easy installment plan. RUDA approved.",
+    },
   },
 
   // ============ BAHRIA ENCLAVE ============
@@ -331,13 +586,30 @@ const properties = [
     bedrooms: 4,
     bathrooms: 4,
     yearBuilt: 2022,
-    description: "Well-built 8 marla house in peaceful Bahria Enclave. 4 bedrooms, modern kitchen, and terrace with green hills view.",
-    features: ["Hills View", "Terrace", "Modern Kitchen", "Wood Work", "Gated Community"],
-    image: "https://images.unsplash.com/photo-1583608205776-bfd35f0d9f83?w=400&h=300&fit=crop",
+    description:
+      "Well-built 8 marla house in peaceful Bahria Enclave. 4 bedrooms, modern kitchen, and terrace with green hills view.",
+    features: [
+      "Hills View",
+      "Terrace",
+      "Modern Kitchen",
+      "Wood Work",
+      "Gated Community",
+    ],
+    image:
+      "https://images.unsplash.com/photo-1583608205776-bfd35f0d9f83?w=400&h=300&fit=crop",
     status: "available",
-    agent: "Hassan Raza",
-    agentPhone: "+92 333 4567890"
-  }
+    agentId: 3,
+    paymentPlan: {
+      totalPrice: 24000000,
+      downPayment: 4800000,
+      downPaymentPercent: 20,
+      installmentMonths: 24,
+      monthlyInstallment: 800000,
+      possession: "Immediate",
+      bookingAmount: 500000,
+      note: "Peaceful community with hills view. Family-oriented neighborhood.",
+    },
+  },
 ];
 
 module.exports = { properties };

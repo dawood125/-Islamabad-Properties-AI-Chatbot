@@ -1,0 +1,17 @@
+[
+  {
+    "bookingId": "PR-202602-001",
+    "propertyId": 15,
+    "propertyTitle": "5 Marla Plot - Capital Smart City",
+    "propertyPrice": "20 Lakh",
+    "bookingAmount": 100000,
+    "customerName": "Dawood Ahmed",
+    "customerPhone": "03261959755",
+    "customerEmail": "Not Provided",
+    "assignedAgent": "Hassan Raza",
+    "agentPhone": "+92 333 4567890",
+    "status": "confirmed",
+    "bookedAt": "2026-02-25T15:50:52.639Z",
+    "company": "Prime Islamabad Realty"
+  }
+]
