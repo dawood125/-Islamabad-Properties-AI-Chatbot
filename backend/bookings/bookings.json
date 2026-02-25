@@ -13,5 +13,20 @@
     "status": "confirmed",
     "bookedAt": "2026-02-25T15:50:52.639Z",
     "company": "Prime Islamabad Realty"
+  },
+  {
+    "bookingId": "PR-202602-002",
+    "propertyId": 8,
+    "propertyTitle": "3 Bed Apartment for Rent - E-11",
+    "propertyPrice": "55,000/month",
+    "bookingAmount": 110000,
+    "customerName": "Haris Ali",
+    "customerPhone": "03472606248",
+    "customerEmail": "Not Provided",
+    "assignedAgent": "Sana Malik",
+    "agentPhone": "+92 321 6543210",
+    "status": "confirmed",
+    "bookedAt": "2026-02-25T16:02:11.942Z",
+    "company": "Prime Islamabad Realty"
   }
 ]
