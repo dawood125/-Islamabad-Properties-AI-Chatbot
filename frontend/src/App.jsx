@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import "./App.css";
 
-const API_URL = import.meta.env.REACT_APP_API_URL || "http://localhost:5000";
+const API_URL = import.meta.env.REACT_APP_API_URL || "https://islamabad-properties-ai-chatbot.onrender.com";
 
 // ============ PROPERTY CARD (Updated with Payment Plan) ============
 const PropertyCard = ({ property, onShowPayment, onBook }) => {
